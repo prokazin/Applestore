@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Админ-панель</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="adminApp">
         <div id="loginForm" class="glass-effect">
             <h2>🔐 Вход в админку</h2>
-            <p style="color:rgba(255,255,255,0.4);font-size:12px;text-align:center;">Пароль: admin123</p>
+            <p style="color:rgba(255,255,255,0.3);font-size:12px;text-align:center;margin-bottom:12px;">Пароль: admin123</p>
             <input type="password" id="adminPassword" placeholder="Пароль">
             <button id="loginBtn">Войти</button>
         </div>
@@ -24,7 +25,7 @@
             <div class="admin-form glass-effect">
                 <h3>➕ Добавить товар</h3>
                 <input type="text" id="productName" placeholder="Название">
-                <input type="text" id="productPrice" placeholder="Цена">
+                <input type="text" id="productPrice" placeholder="Цена (например: 99999)">
                 <textarea id="productDesc" placeholder="Описание"></textarea>
                 <select id="productCategory">
                     <option value="iphone">iPhone</option>
@@ -32,15 +33,32 @@
                     <option value="mac">Mac</option>
                     <option value="airpods">AirPods</option>
                 </select>
-                <input type="text" id="productImages" placeholder="URL фото (через запятую)">
+                
+                <!-- Загрузка фото с устройства -->
+                <div class="image-upload-area">
+                    <label>Фото товара</label>
+                    <div class="upload-zone" id="uploadZone">
+                        <input type="file" id="fileInput" accept="image/*" multiple>
+                        <div class="upload-placeholder">
+                            <span class="upload-icon">📸</span>
+                            <p>Нажмите или перетащите фото</p>
+                            <span class="upload-hint">Поддерживаются JPG, PNG, WEBP</span>
+                        </div>
+                        <div class="upload-preview" id="uploadPreview"></div>
+                    </div>
+                    <div class="url-input-wrapper">
+                        <input type="text" id="productImages" placeholder="Или вставьте URL фото (через запятую)">
+                    </div>
+                </div>
+
                 <div id="specsContainer">
                     <div class="spec-input">
-                        <input type="text" class="spec-name" placeholder="Название">
+                        <input type="text" class="spec-name" placeholder="Название характеристики">
                         <input type="text" class="spec-value" placeholder="Значение">
                         <button class="add-spec-btn">+</button>
                     </div>
                 </div>
-                <button id="addProductBtn">Добавить</button>
+                <button id="addProductBtn">Добавить товар</button>
             </div>
 
             <div id="adminProductList"></div>
