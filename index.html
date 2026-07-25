@@ -9,71 +9,65 @@
     <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
 </head>
 <body>
-    <div id="app">
-        <!-- Динамический островок (как на iPhone) -->
-        <div class="dynamic-island" id="dynamicIsland">
-            <div class="island-content">
-                <div class="island-time" id="islandTime">9:41</div>
-                <div class="island-status">
-                    <span class="island-dot"></span>
-                    <span class="island-text">Apple Store</span>
+    <!-- Эмуляция экрана телефона -->
+    <div class="phone-frame">
+        <div id="app">
+            <!-- Динамический островок -->
+            <div class="dynamic-island" id="dynamicIsland">
+                <div class="island-content">
+                    <span class="island-time" id="islandTime">9:41</span>
+                    <div class="island-status">
+                        <span class="island-dot"></span>
+                        <span class="island-text">Apple Store</span>
+                    </div>
                 </div>
-                <div class="island-battery">🔋</div>
             </div>
+
+            <!-- Верхняя панель без логотипа -->
+            <header class="header">
+                <div class="header-left"></div>
+                <div class="header-center"></div>
+                <div class="header-actions">
+                    <button class="cart-btn" id="cartBtn">
+                        <span class="cart-icon">🛒</span>
+                        <span class="cart-badge" id="cartBadge">0</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Каталог товаров -->
+            <main class="catalog" id="catalog">
+                <!-- Товары загружаются через JS -->
+            </main>
+
+            <!-- Нижняя навигация как в Telegram -->
+            <nav class="bottom-nav">
+                <div class="nav-item active" data-category="watch">
+                    <div class="nav-icon-wrapper">
+                        <img src="apple.png" alt="Watch" class="nav-icon">
+                    </div>
+                    <span class="nav-label">Watch</span>
+                </div>
+                <div class="nav-item" data-category="iphone">
+                    <div class="nav-icon-wrapper">
+                        <img src="iphone.png" alt="iPhone" class="nav-icon">
+                    </div>
+                    <span class="nav-label">iPhone</span>
+                </div>
+                <div class="nav-item" data-category="mac">
+                    <div class="nav-icon-wrapper">
+                        <img src="computer.png" alt="Mac" class="nav-icon">
+                    </div>
+                    <span class="nav-label">Mac</span>
+                </div>
+                <div class="nav-item" data-category="airpods">
+                    <div class="nav-icon-wrapper">
+                        <img src="airpods.png" alt="AirPods" class="nav-icon">
+                    </div>
+                    <span class="nav-label">AirPods</span>
+                </div>
+            </nav>
         </div>
-
-        <!-- Верхняя панель -->
-        <header class="header">
-            <div class="logo">
-                <span class="logo-icon">🍎</span>
-                <span class="logo-text">Apple Store</span>
-            </div>
-            <div class="header-actions">
-                <button class="cart-btn" id="cartBtn">
-                    <span class="cart-icon">🛒</span>
-                    <span class="cart-badge" id="cartBadge">0</span>
-                </button>
-            </div>
-        </header>
-
-        <!-- Каталог товаров -->
-        <main class="catalog" id="catalog">
-            <!-- Товары загружаются через JS -->
-        </main>
-
-        <!-- Нижняя навигация как в Telegram -->
-        <nav class="bottom-nav">
-            <div class="nav-item" data-category="watch">
-                <div class="nav-icon-wrapper">
-                    <img src="watch.png" alt="Watch" class="nav-icon">
-                </div>
-                <span class="nav-label">Watch</span>
-            </div>
-            <div class="nav-item active" data-category="all">
-                <div class="nav-icon-wrapper">
-                    <img src="apple.png" alt="Apple" class="nav-icon">
-                </div>
-                <span class="nav-label">Все</span>
-            </div>
-            <div class="nav-item" data-category="iphone">
-                <div class="nav-icon-wrapper">
-                    <img src="iphone.png" alt="iPhone" class="nav-icon">
-                </div>
-                <span class="nav-label">iPhone</span>
-            </div>
-            <div class="nav-item" data-category="mac">
-                <div class="nav-icon-wrapper">
-                    <img src="computer.png" alt="Mac" class="nav-icon">
-                </div>
-                <span class="nav-label">Mac</span>
-            </div>
-            <div class="nav-item" data-category="airpods">
-                <div class="nav-icon-wrapper">
-                    <img src="airpods.png" alt="AirPods" class="nav-icon">
-                </div>
-                <span class="nav-label">AirPods</span>
-            </div>
-        </nav>
     </div>
 
     <!-- Модальное окно товара -->
@@ -91,7 +85,7 @@
         </div>
     </div>
 
-    <!-- Модальное окно корзины (стильное) -->
+    <!-- Модальное окно корзины -->
     <div class="modal" id="cartModal">
         <div class="modal-content glass-effect cart-modal">
             <div class="cart-header">
