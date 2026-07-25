@@ -9,19 +9,18 @@
 <body>
     <div id="adminApp">
         <div id="loginForm">
-            <h2>🔐 Вход в админ-панель</h2>
-            <input type="password" id="adminPassword" placeholder="Введите пароль">
+            <h2>🔐 Вход</h2>
+            <input type="password" id="adminPassword" placeholder="Пароль">
             <button id="loginBtn">Войти</button>
         </div>
 
         <div id="adminPanel" style="display:none;">
             <header class="admin-header">
-                <h1>📦 Управление товарами</h1>
+                <h1>📦 Товары</h1>
                 <button id="logoutBtn">Выйти</button>
             </header>
 
             <div class="admin-form">
-                <h3>➕ Добавить товар</h3>
                 <input type="text" id="productName" placeholder="Название">
                 <input type="text" id="productPrice" placeholder="Цена">
                 <textarea id="productDesc" placeholder="Описание"></textarea>
@@ -33,14 +32,13 @@
                 </select>
                 <input type="text" id="productImages" placeholder="URL фото (через запятую)">
                 <div id="specsContainer">
-                    <h4>📋 Характеристики</h4>
                     <div class="spec-input">
                         <input type="text" class="spec-name" placeholder="Название">
                         <input type="text" class="spec-value" placeholder="Значение">
                         <button class="add-spec-btn">+</button>
                     </div>
                 </div>
-                <button id="addProductBtn">Добавить товар</button>
+                <button id="addProductBtn">Добавить</button>
             </div>
 
             <div id="adminProductList"></div>
