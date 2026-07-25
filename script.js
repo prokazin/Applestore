@@ -2,6 +2,7 @@
 let products = [];
 let cart = [];
 let currentCategory = 'all';
+let cartComment = '';
 
 // ===== КОНФИГУРАЦИЯ =====
 const APP_URL = 'https://applestore.nazar-bronnikov22.workers.dev/';
@@ -18,42 +19,11 @@ function loadData() {
         products = JSON.parse(saved);
     } else {
         products = [
-            // iPhone (3 товара)
-            {
-                id: 1,
-                name: 'iPhone 15 Pro',
-                price: '999$',
-                description: 'Флагманский смартфон с титановым корпусом и Dynamic Island',
-                category: 'iphone',
-                images: [
-                    'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop',
-                    'https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'
-                ],
-                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A17 Pro', 'Камера': '48 МП', 'Память': '256 ГБ' }
-            },
-            {
-                id: 2,
-                name: 'iPhone 15',
-                price: '799$',
-                description: 'Смартфон с Dynamic Island и USB-C',
-                category: 'iphone',
-                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A16', 'Камера': '48 МП', 'Память': '128 ГБ' }
-            },
-            {
-                id: 3,
-                name: 'iPhone SE',
-                price: '429$',
-                description: 'Компактный смартфон с Touch ID',
-                category: 'iphone',
-                images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '4.7" LCD', 'Процессор': 'A15', 'Камера': '12 МП', 'Память': '64 ГБ' }
-            },
-            // Apple Watch (3 товара)
+            // Apple Watch (3 товара) - теперь первая категория
             {
                 id: 4,
                 name: 'Apple Watch Ultra 2',
-                price: '799$',
+                price: '79900',
                 description: 'Самые прочные умные часы для экстремальных условий',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop'],
@@ -62,7 +32,7 @@ function loadData() {
             {
                 id: 5,
                 name: 'Apple Watch Series 9',
-                price: '399$',
+                price: '39900',
                 description: 'Умные часы с сенсором температуры',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=400&fit=crop'],
@@ -71,17 +41,45 @@ function loadData() {
             {
                 id: 6,
                 name: 'Apple Watch SE',
-                price: '249$',
+                price: '24900',
                 description: 'Доступные умные часы с фитнес-трекингом',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '44mm', 'Процессор': 'S8', 'GPS': 'Да', 'Водозащита': '50m' }
             },
+            // iPhone (3 товара)
+            {
+                id: 1,
+                name: 'iPhone 15 Pro',
+                price: '99990',
+                description: 'Флагманский смартфон с титановым корпусом и Dynamic Island',
+                category: 'iphone',
+                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
+                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A17 Pro', 'Камера': '48 МП', 'Память': '256 ГБ' }
+            },
+            {
+                id: 2,
+                name: 'iPhone 15',
+                price: '79990',
+                description: 'Смартфон с Dynamic Island и USB-C',
+                category: 'iphone',
+                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
+                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A16', 'Камера': '48 МП', 'Память': '128 ГБ' }
+            },
+            {
+                id: 3,
+                name: 'iPhone SE',
+                price: '42990',
+                description: 'Компактный смартфон с Touch ID',
+                category: 'iphone',
+                images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop'],
+                specs: { 'Экран': '4.7" LCD', 'Процессор': 'A15', 'Камера': '12 МП', 'Память': '64 ГБ' }
+            },
             // Mac (3 товара)
             {
                 id: 7,
                 name: 'MacBook Pro 14',
-                price: '1999$',
+                price: '199990',
                 description: 'Профессиональный ноутбук с M3 Pro',
                 category: 'mac',
                 images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'],
@@ -90,7 +88,7 @@ function loadData() {
             {
                 id: 8,
                 name: 'MacBook Air',
-                price: '1099$',
+                price: '109990',
                 description: 'Самый тонкий ноутбук с M2',
                 category: 'mac',
                 images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'],
@@ -99,7 +97,7 @@ function loadData() {
             {
                 id: 9,
                 name: 'iMac 24',
-                price: '1299$',
+                price: '129990',
                 description: 'Моноблок с M3 и 4.5K дисплеем',
                 category: 'mac',
                 images: ['https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&h=400&fit=crop'],
@@ -109,7 +107,7 @@ function loadData() {
             {
                 id: 10,
                 name: 'AirPods Pro 2',
-                price: '249$',
+                price: '24990',
                 description: 'Наушники с активным шумоподавлением',
                 category: 'airpods',
                 images: ['https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop'],
@@ -118,7 +116,7 @@ function loadData() {
             {
                 id: 11,
                 name: 'AirPods Max',
-                price: '549$',
+                price: '54990',
                 description: 'Полноразмерные наушники премиум-класса',
                 category: 'airpods',
                 images: ['https://images.unsplash.com/photo-1611859266238-a4da980d66d9?w=400&h=400&fit=crop'],
@@ -127,7 +125,7 @@ function loadData() {
             {
                 id: 12,
                 name: 'AirPods 3',
-                price: '179$',
+                price: '17990',
                 description: 'Беспроводные наушники с пространственным аудио',
                 category: 'airpods',
                 images: ['https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop'],
@@ -204,7 +202,7 @@ function renderProducts(category = 'all') {
     const filtered = category === 'all' ? products : products.filter(p => p.category === category);
 
     if (filtered.length === 0) {
-        catalog.innerHTML = `<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px;">📭 Нет товаров</div>`;
+        catalog.innerHTML = `<div style="text-align:center;padding:30px 0;color:rgba(255,255,255,0.2);font-size:14px;">📭 Нет товаров</div>`;
         return;
     }
 
@@ -212,18 +210,25 @@ function renderProducts(category = 'all') {
         <div class="product-card" data-id="${product.id}">
             <img src="${product.images[0]}" alt="${product.name}" loading="lazy" decoding="async">
             <h3>${product.name}</h3>
-            <div class="price">${product.price}</div>
+            <div class="price">${formatPrice(product.price)}</div>
             <div class="category-tag">${product.category}</div>
         </div>
     `).join('');
 
     document.querySelectorAll('.product-card').forEach((card, index) => {
-        card.style.animationDelay = `${index * 0.05}s`;
+        card.style.animationDelay = `${index * 0.04}s`;
         card.addEventListener('click', () => {
             const id = parseInt(card.dataset.id);
             openModal(id);
         });
     });
+}
+
+// ===== ФОРМАТИРОВАНИЕ ЦЕНЫ =====
+function formatPrice(price) {
+    const num = parseInt(price);
+    if (isNaN(num)) return price;
+    return num.toLocaleString('ru-RU') + ' ₽';
 }
 
 // ===== ОТКРЫТИЕ МОДАЛЬНОГО ОКНА ТОВАРА =====
@@ -233,7 +238,7 @@ function openModal(productId) {
 
     const modal = document.getElementById('productModal');
     document.getElementById('modalTitle').textContent = product.name;
-    document.getElementById('modalPrice').textContent = product.price;
+    document.getElementById('modalPrice').textContent = formatPrice(product.price);
     document.getElementById('modalDescription').textContent = product.description;
 
     const carousel = document.getElementById('modalCarousel');
@@ -277,25 +282,35 @@ function openCart() {
     const modal = document.getElementById('cartModal');
     const container = document.getElementById('cartItems');
     
+    // Загружаем сохраненный комментарий
+    const savedComment = localStorage.getItem('cartComment') || '';
+    document.getElementById('cartComment').value = savedComment;
+    
     if (cart.length === 0) {
-        container.innerHTML = '<div class="empty-cart">🛒 Корзина пуста</div>';
-        document.getElementById('cartTotal').textContent = '0$';
+        container.innerHTML = `
+            <div class="empty-cart">
+                <span class="empty-icon">🛒</span>
+                Корзина пуста
+                <span style="font-size:12px;display:block;margin-top:4px;color:rgba(255,255,255,0.15);">Добавьте товары для оформления заказа</span>
+            </div>
+        `;
+        document.getElementById('cartTotal').textContent = '0 ₽';
     } else {
         container.innerHTML = cart.map((item, index) => `
             <div class="cart-item">
                 <div class="cart-item-info">
                     <span class="cart-item-name">${item.name}</span>
-                    <span class="cart-item-price">${item.price}</span>
+                    <span class="cart-item-price">${formatPrice(item.price)}</span>
                 </div>
                 <button class="cart-item-remove" onclick="removeFromCart(${index})">✕</button>
             </div>
         `).join('');
         
         const total = cart.reduce((sum, item) => {
-            const price = parseFloat(item.price.replace('$', ''));
-            return sum + price;
+            const price = parseInt(item.price);
+            return sum + (isNaN(price) ? 0 : price);
         }, 0);
-        document.getElementById('cartTotal').textContent = `${total.toFixed(0)}$`;
+        document.getElementById('cartTotal').textContent = formatPrice(total.toString());
     }
     
     modal.style.display = 'flex';
@@ -324,12 +339,22 @@ function clearCart() {
     }
 }
 
+// ===== СОХРАНЕНИЕ КОММЕНТАРИЯ =====
+document.getElementById('cartComment').addEventListener('input', function() {
+    cartComment = this.value;
+    localStorage.setItem('cartComment', cartComment);
+});
+
 // ===== ОФОРМЛЕНИЕ ЗАКАЗА =====
 function checkout() {
     if (cart.length === 0) {
         showNotification('⚠️ Корзина пуста', 'error');
         return;
     }
+    
+    // Сохраняем комментарий
+    cartComment = document.getElementById('cartComment').value;
+    localStorage.setItem('cartComment', cartComment);
     
     document.getElementById('cartModal').style.display = 'none';
     openPaymentModal();
@@ -339,19 +364,19 @@ function checkout() {
 function openPaymentModal() {
     const modal = document.getElementById('paymentModal');
     const total = cart.reduce((sum, item) => {
-        const price = parseFloat(item.price.replace('$', ''));
-        return sum + price;
+        const price = parseInt(item.price);
+        return sum + (isNaN(price) ? 0 : price);
     }, 0);
     
     document.getElementById('paymentDetails').innerHTML = `
         <p>🛍️ Товаров: <strong>${cart.length}</strong></p>
-        <p>💰 Сумма: <strong>${total.toFixed(0)}$</strong></p>
-        <p style="font-size:12px;color:rgba(255,255,255,0.3);margin-top:8px;">
+        <p>💰 Сумма: <strong>${formatPrice(total.toString())}</strong></p>
+        <p style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:8px;">
             ${cart.map(item => `• ${item.name}`).join('<br>')}
         </p>
+        ${cartComment ? `<p style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:6px;">📝 Комментарий: ${cartComment}</p>` : ''}
     `;
     
-    // Очищаем поля
     document.getElementById('cardNumber').value = '';
     document.getElementById('cardExpiry').value = '';
     document.getElementById('cardCvc').value = '';
@@ -387,43 +412,28 @@ document.getElementById('cardCvc').addEventListener('input', function(e) {
     this.value = this.value.replace(/\D/g, '').slice(0, 3);
 });
 
-// ===== ПРОВЕРКА КАРТЫ (валидация) =====
+// ===== ПРОВЕРКА КАРТЫ =====
 function validateCard(number, expiry, cvc, name) {
     const errors = [];
     
-    // Проверка номера карты
     const cleanNumber = number.replace(/\s/g, '');
-    if (cleanNumber.length !== 16) {
-        errors.push('Номер карты должен содержать 16 цифр');
-    }
-    if (!/^\d{16}$/.test(cleanNumber)) {
-        errors.push('Номер карты содержит недопустимые символы');
-    }
+    if (cleanNumber.length !== 16) errors.push('Номер карты должен содержать 16 цифр');
+    if (!/^\d{16}$/.test(cleanNumber)) errors.push('Номер карты содержит недопустимые символы');
     
-    // Проверка срока
     if (!/^\d{2}\/\d{2}$/.test(expiry)) {
         errors.push('Формат срока: MM/YY');
     } else {
         const [month, year] = expiry.split('/');
         const currentYear = new Date().getFullYear() % 100;
         const currentMonth = new Date().getMonth() + 1;
-        if (parseInt(month) < 1 || parseInt(month) > 12) {
-            errors.push('Неверный месяц');
-        }
+        if (parseInt(month) < 1 || parseInt(month) > 12) errors.push('Неверный месяц');
         if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
             errors.push('Карта просрочена');
         }
     }
     
-    // Проверка CVC
-    if (!/^\d{3}$/.test(cvc)) {
-        errors.push('CVC должен содержать 3 цифры');
-    }
-    
-    // Проверка имени
-    if (name.length < 2) {
-        errors.push('Введите имя владельца');
-    }
+    if (!/^\d{3}$/.test(cvc)) errors.push('CVC должен содержать 3 цифры');
+    if (name.length < 2) errors.push('Введите имя владельца');
     
     return errors;
 }
@@ -439,7 +449,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
     btn.textContent = '⏳ Проверка...';
     btn.disabled = true;
     
-    // Валидация карты
     const errors = validateCard(cardNumber, cardExpiry, cardCvc, cardName);
     if (errors.length > 0) {
         btn.textContent = '❌ Ошибка';
@@ -454,20 +463,16 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
     }
     
     const total = cart.reduce((sum, item) => {
-        const price = parseFloat(item.price.replace('$', ''));
-        return sum + price;
+        const price = parseInt(item.price);
+        return sum + (isNaN(price) ? 0 : price);
     }, 0);
     
-    // Создаем платеж через YooKassa
     try {
         btn.textContent = '⏳ Обработка...';
         
-        // 1. Создаем платеж на сервере (через Cloudflare Worker)
         const response = await fetch(`${APP_URL}create-payment`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 amount: total,
                 currency: 'RUB',
@@ -482,7 +487,6 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
             throw new Error(paymentData.error);
         }
         
-        // 2. Открываем виджет оплаты YooKassa
         const checkout = new YooKassaCheckoutWidget({
             confirmation_token: paymentData.confirmation_token,
             return_url: APP_URL,
@@ -492,39 +496,37 @@ document.getElementById('confirmPaymentBtn').addEventListener('click', async fun
                 btn.textContent = '✅ Оплатить';
                 btn.classList.add('error');
                 btn.disabled = false;
-                setTimeout(() => {
-                    btn.classList.remove('error');
-                }, 3000);
+                setTimeout(() => btn.classList.remove('error'), 3000);
             }
         });
         
         checkout.on('success', function() {
-            // Успешная оплата
             btn.textContent = '✅ Успешно!';
             btn.classList.add('success');
             
-            // Отправляем заказ продавцу
-            const orderDetails = cart.map(item => `• ${item.name} - ${item.price}`).join('\n');
+            const orderDetails = cart.map(item => `• ${item.name} - ${formatPrice(item.price)}`).join('\n');
             const message = `
 🛍️ <b>НОВЫЙ ЗАКАЗ ОПЛАЧЕН!</b>
 
 📦 <b>Товары:</b>
 ${orderDetails}
 
-💰 <b>Итого:</b> ${total.toFixed(0)} RUB
+💰 <b>Итого:</b> ${formatPrice(total.toString())}
 💳 <b>Оплата:</b> Карта (YooKassa)
 
 👤 <b>Клиент:</b> Telegram Mini App
 ✅ <b>Статус:</b> ОПЛАЧЕНО
+${cartComment ? `\n📝 <b>Комментарий:</b> ${cartComment}` : ''}
             `.trim();
             
             sendTelegramMessage(message);
             showNotification('🎉 Оплата прошла успешно!', 'success');
             
-            // Очищаем корзину
             cart = [];
             saveCart();
             updateCartBadge();
+            cartComment = '';
+            localStorage.setItem('cartComment', '');
             
             setTimeout(() => {
                 btn.textContent = '✅ Оплатить';
@@ -540,9 +542,7 @@ ${orderDetails}
             btn.textContent = '✅ Оплатить';
             btn.classList.add('error');
             btn.disabled = false;
-            setTimeout(() => {
-                btn.classList.remove('error');
-            }, 3000);
+            setTimeout(() => btn.classList.remove('error'), 3000);
         });
         
         checkout.render();
@@ -553,9 +553,7 @@ ${orderDetails}
         btn.textContent = '✅ Оплатить';
         btn.classList.add('error');
         btn.disabled = false;
-        setTimeout(() => {
-            btn.classList.remove('error');
-        }, 3000);
+        setTimeout(() => btn.classList.remove('error'), 3000);
     }
 });
 
@@ -587,17 +585,24 @@ window.addEventListener('click', (e) => {
     }
 });
 
+// ===== ОБНОВЛЕНИЕ ВРЕМЕНИ В ОСТРОВКЕ =====
+function updateIslandTime() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('islandTime').textContent = `${hours}:${minutes}`;
+}
+
+// Обновляем время каждую минуту
+updateIslandTime();
+setInterval(updateIslandTime, 60000);
+
 // ===== НАВИГАЦИЯ =====
 document.querySelectorAll('.nav-item').forEach(item => {
     item.addEventListener('click', () => {
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         renderProducts(item.dataset.category);
-        
-        document.querySelector('.catalog').style.animation = 'none';
-        setTimeout(() => {
-            document.querySelector('.catalog').style.animation = 'fadeSlideUp 0.3s ease';
-        }, 10);
     });
 });
 
