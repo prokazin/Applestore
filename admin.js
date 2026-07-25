@@ -39,8 +39,71 @@ function showNotification(message, type = 'info') {
         notif.style.opacity = '0';
         notif.style.transform = 'translateX(-50%) translateY(-10px)';
         setTimeout(() => notif.remove(), 300);
-    }, 2500);
+    }, 3000);
 }
+
+// ===== ЗАГРУЗКА ФОТО =====
+let uploadedImages = [];
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    const files = Array.from(this.files);
+    const preview = document.getElementById('uploadPreview');
+    
+    files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = file.name;
+            preview.appendChild(img);
+            
+            // Сохраняем base64 для отправки
+            uploadedImages.push(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+    
+    // Очищаем input для возможности повторной загрузки
+    this.value = '';
+});
+
+// Drag and Drop
+const uploadZone = document.getElementById('uploadZone');
+uploadZone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadZone.style.borderColor = 'rgba(124, 58, 237, 0.5)';
+    uploadZone.style.background = 'rgba(124, 58, 237, 0.05)';
+});
+
+uploadZone.addEventListener('dragleave', () => {
+    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+    uploadZone.style.background = 'rgba(255, 255, 255, 0.02)';
+});
+
+uploadZone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+    uploadZone.style.background = 'rgba(255, 255, 255, 0.02)';
+    
+    const files = Array.from(e.dataTransfer.files);
+    const preview = document.getElementById('uploadPreview');
+    
+    files.forEach(file => {
+        if (!file.type.startsWith('image/')) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const img = document.createElement('img');
+            img.src = event.target.result;
+            img.alt = file.name;
+            preview.appendChild(img);
+            uploadedImages.push(event.target.result);
+        };
+        reader.readAsDataURL(file);
+    });
+});
 
 // ===== ЗАГРУЗКА ТОВАРОВ =====
 function loadAdminProducts() {
@@ -48,7 +111,7 @@ function loadAdminProducts() {
     const list = document.getElementById('adminProductList');
     
     if (products.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;">📭 Нет товаров</p>';
+        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.2);padding:30px;">📭 Нет товаров</p>';
         return;
     }
     
@@ -56,7 +119,8 @@ function loadAdminProducts() {
         <div class="admin-product-item">
             <div>
                 <h4>${p.name}</h4>
-                <p>💰 ${p.price} | 📂 ${p.category}</p>
+                <p>💰 ${p.price} ₽ | 📂 ${p.category}</p>
+                ${p.images && p.images.length > 0 ? `<p style="color:rgba(255,255,255,0.2);font-size:10px;">📸 ${p.images.length} фото</p>` : ''}
             </div>
             <div>
                 <button onclick="deleteProduct(${index})">🗑</button>
@@ -72,7 +136,7 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     const price = document.getElementById('productPrice').value.trim();
     const description = document.getElementById('productDesc').value.trim();
     const category = document.getElementById('productCategory').value;
-    const imagesInput = document.getElementById('productImages').value.trim();
+    const imagesUrl = document.getElementById('productImages').value.trim();
     
     const specNames = document.querySelectorAll('.spec-name');
     const specValues = document.querySelectorAll('.spec-value');
@@ -91,13 +155,21 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     }
     
     const products = JSON.parse(localStorage.getItem('appleStoreProducts') || '[]');
-    const images = imagesInput ? imagesInput.split(',').map(s => s.trim()).filter(s => s) : 
-        ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'];
+    
+    // Собираем все изображения (из загруженных и из URL)
+    let images = [];
+    if (uploadedImages.length > 0) {
+        images = uploadedImages;
+    } else if (imagesUrl) {
+        images = imagesUrl.split(',').map(s => s.trim()).filter(s => s);
+    } else {
+        images = ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'];
+    }
     
     products.push({
         id: Date.now(),
         name,
-        price,
+        price: price.replace(/\D/g, ''),
         description: description || 'Описание отсутствует',
         category,
         images: images,
@@ -107,11 +179,14 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     localStorage.setItem('appleStoreProducts', JSON.stringify(products));
     loadAdminProducts();
     
+    // Очистка формы
     document.getElementById('productName').value = '';
     document.getElementById('productPrice').value = '';
     document.getElementById('productDesc').value = '';
     document.getElementById('productImages').value = '';
     document.querySelectorAll('.spec-name, .spec-value').forEach(inp => inp.value = '');
+    document.getElementById('uploadPreview').innerHTML = '';
+    uploadedImages = [];
     
     showNotification('✅ Товар добавлен!', 'success');
 });
@@ -124,7 +199,7 @@ document.querySelector('.add-spec-btn').addEventListener('click', () => {
     div.innerHTML = `
         <input type="text" class="spec-name" placeholder="Название">
         <input type="text" class="spec-value" placeholder="Значение">
-        <button onclick="this.parentElement.remove()" style="padding:6px 12px;background:rgba(255,59,48,0.6);border:none;border-radius:8px;color:#fff;cursor:pointer;">✕</button>
+        <button onclick="this.parentElement.remove()" style="padding:6px 14px;background:rgba(255,59,48,0.4);border:none;border-radius:8px;color:#fff;cursor:pointer;">✕</button>
     `;
     container.appendChild(div);
 });
@@ -149,8 +224,10 @@ function editProduct(index) {
     const newName = prompt('📝 Новое название:', product.name);
     if (newName !== null && newName.trim()) product.name = newName.trim();
     
-    const newPrice = prompt('💰 Новая цена:', product.price);
-    if (newPrice !== null && newPrice.trim()) product.price = newPrice.trim();
+    const newPrice = prompt('💰 Новая цена (только цифры):', product.price);
+    if (newPrice !== null && newPrice.trim()) {
+        product.price = newPrice.replace(/\D/g, '');
+    }
     
     const newDesc = prompt('📝 Новое описание:', product.description);
     if (newDesc !== null) product.description = newDesc.trim() || 'Описание отсутствует';
