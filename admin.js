@@ -58,34 +58,30 @@ document.getElementById('fileInput').addEventListener('change', function(e) {
             img.src = event.target.result;
             img.alt = file.name;
             preview.appendChild(img);
-            
-            // Сохраняем base64 для отправки
             uploadedImages.push(event.target.result);
         };
         reader.readAsDataURL(file);
     });
     
-    // Очищаем input для возможности повторной загрузки
     this.value = '';
 });
 
-// Drag and Drop
 const uploadZone = document.getElementById('uploadZone');
 uploadZone.addEventListener('dragover', (e) => {
     e.preventDefault();
-    uploadZone.style.borderColor = 'rgba(124, 58, 237, 0.5)';
-    uploadZone.style.background = 'rgba(124, 58, 237, 0.05)';
+    uploadZone.style.borderColor = 'rgba(124, 58, 237, 0.3)';
+    uploadZone.style.background = 'rgba(124, 58, 237, 0.03)';
 });
 
 uploadZone.addEventListener('dragleave', () => {
-    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-    uploadZone.style.background = 'rgba(255, 255, 255, 0.02)';
+    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+    uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
 });
 
 uploadZone.addEventListener('drop', (e) => {
     e.preventDefault();
-    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.08)';
-    uploadZone.style.background = 'rgba(255, 255, 255, 0.02)';
+    uploadZone.style.borderColor = 'rgba(255, 255, 255, 0.06)';
+    uploadZone.style.background = 'rgba(255, 255, 255, 0.01)';
     
     const files = Array.from(e.dataTransfer.files);
     const preview = document.getElementById('uploadPreview');
@@ -111,7 +107,7 @@ function loadAdminProducts() {
     const list = document.getElementById('adminProductList');
     
     if (products.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.2);padding:30px;">📭 Нет товаров</p>';
+        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.15);padding:30px;">📭 Нет товаров</p>';
         return;
     }
     
@@ -119,8 +115,8 @@ function loadAdminProducts() {
         <div class="admin-product-item">
             <div>
                 <h4>${p.name}</h4>
-                <p>💰 ${p.price} ₽ | 📂 ${p.category}</p>
-                ${p.images && p.images.length > 0 ? `<p style="color:rgba(255,255,255,0.2);font-size:10px;">📸 ${p.images.length} фото</p>` : ''}
+                <p>💰 ${formatPrice(p.price)} | 📂 ${p.category}</p>
+                ${p.images && p.images.length > 0 ? `<p style="color:rgba(255,255,255,0.15);font-size:9px;">📸 ${p.images.length} фото</p>` : ''}
             </div>
             <div>
                 <button onclick="deleteProduct(${index})">🗑</button>
@@ -128,6 +124,12 @@ function loadAdminProducts() {
             </div>
         </div>
     `).join('');
+}
+
+function formatPrice(price) {
+    const num = parseInt(price);
+    if (isNaN(num)) return price + ' ₽';
+    return num.toLocaleString('ru-RU') + ' ₽';
 }
 
 // ===== ДОБАВЛЕНИЕ ТОВАРА =====
@@ -156,7 +158,6 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     
     const products = JSON.parse(localStorage.getItem('appleStoreProducts') || '[]');
     
-    // Собираем все изображения (из загруженных и из URL)
     let images = [];
     if (uploadedImages.length > 0) {
         images = uploadedImages;
@@ -179,7 +180,6 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     localStorage.setItem('appleStoreProducts', JSON.stringify(products));
     loadAdminProducts();
     
-    // Очистка формы
     document.getElementById('productName').value = '';
     document.getElementById('productPrice').value = '';
     document.getElementById('productDesc').value = '';
@@ -199,7 +199,7 @@ document.querySelector('.add-spec-btn').addEventListener('click', () => {
     div.innerHTML = `
         <input type="text" class="spec-name" placeholder="Название">
         <input type="text" class="spec-value" placeholder="Значение">
-        <button onclick="this.parentElement.remove()" style="padding:6px 14px;background:rgba(255,59,48,0.4);border:none;border-radius:8px;color:#fff;cursor:pointer;">✕</button>
+        <button onclick="this.parentElement.remove()" style="padding:5px 12px;background:rgba(255,59,48,0.3);border:none;border-radius:6px;color:#fff;cursor:pointer;">✕</button>
     `;
     container.appendChild(div);
 });
