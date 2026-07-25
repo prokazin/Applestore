@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Apple Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Верхняя панель -->
+        <header class="header">
+            <div class="logo">🍎 Apple Store</div>
+            <div class="cart-badge" id="cartBadge">0</div>
+        </header>
+
+        <!-- Категории товаров -->
+        <nav class="categories">
+            <button class="cat-btn active" data-category="all">Все</button>
+            <button class="cat-btn" data-category="iphone">iPhone</button>
+            <button class="cat-btn" data-category="ipad">iPad</button>
+            <button class="cat-btn" data-category="mac">Mac</button>
+            <button class="cat-btn" data-category="airpods">AirPods</button>
+        </nav>
+
+        <!-- Каталог товаров -->
+        <main class="catalog" id="catalog">
+            <!-- Товары будут загружены через JavaScript -->
+        </main>
+
+        <!-- Нижняя навигация (только иконки PNG) -->
+        <nav class="bottom-nav">
+            <img src="airpods.png" alt="AirPods" class="nav-icon" data-category="airpods">
+            <img src="apple.png" alt="Apple" class="nav-icon" data-category="all">
+            <img src="iphone.png" alt="iPhone" class="nav-icon" data-category="iphone">
+            <img src="computer.png" alt="Mac" class="nav-icon" data-category="mac">
+        </nav>
+    </div>
+
+    <!-- Модальное окно товара -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="modal-carousel" id="modalCarousel"></div>
+            <h2 id="modalTitle"></h2>
+            <p id="modalPrice"></p>
+            <p id="modalDescription"></p>
+            <div id="modalSpecs" class="specs"></div>
+            <button class="buy-btn" id="modalBuyBtn">Купить</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
