@@ -8,32 +8,31 @@
 </head>
 <body>
     <div id="app">
-        <!-- Верхняя панель -->
+        <!-- Верхняя панель с корзиной -->
         <header class="header">
             <div class="logo">🍎 Apple Store</div>
             <div class="cart-badge" id="cartBadge">0</div>
         </header>
 
-        <!-- Категории товаров -->
-        <nav class="categories">
-            <button class="cat-btn active" data-category="all">Все</button>
-            <button class="cat-btn" data-category="iphone">iPhone</button>
-            <button class="cat-btn" data-category="ipad">iPad</button>
-            <button class="cat-btn" data-category="mac">Mac</button>
-            <button class="cat-btn" data-category="airpods">AirPods</button>
-        </nav>
-
-        <!-- Каталог товаров -->
+        <!-- Каталог товаров (скроллится) -->
         <main class="catalog" id="catalog">
             <!-- Товары будут загружены через JavaScript -->
         </main>
 
-        <!-- Нижняя навигация (только иконки PNG) -->
+        <!-- Нижняя навигация - только иконки PNG -->
         <nav class="bottom-nav">
-            <img src="airpods.png" alt="AirPods" class="nav-icon" data-category="airpods">
-            <img src="apple.png" alt="Apple" class="nav-icon" data-category="all">
-            <img src="iphone.png" alt="iPhone" class="nav-icon" data-category="iphone">
-            <img src="computer.png" alt="Mac" class="nav-icon" data-category="mac">
+            <div class="nav-item" data-category="airpods">
+                <img src="airpods.png" alt="AirPods" class="nav-icon">
+            </div>
+            <div class="nav-item active" data-category="all">
+                <img src="apple.png" alt="Apple" class="nav-icon">
+            </div>
+            <div class="nav-item" data-category="iphone">
+                <img src="iphone.png" alt="iPhone" class="nav-icon">
+            </div>
+            <div class="nav-item" data-category="mac">
+                <img src="computer.png" alt="Mac" class="nav-icon">
+            </div>
         </nav>
     </div>
 
