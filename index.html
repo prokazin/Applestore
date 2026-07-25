@@ -11,18 +11,21 @@
         <!-- Верхняя панель -->
         <header class="header">
             <div class="logo">🍎 Apple Store</div>
-            <div class="cart-badge" id="cartBadge">0</div>
+            <div class="header-actions">
+                <div class="cart-badge" id="cartBadge">0</div>
+                <button class="cart-btn" id="cartBtn">🛒</button>
+            </div>
         </header>
 
-        <!-- Каталог товаров (скроллится только он) -->
+        <!-- Каталог товаров -->
         <main class="catalog" id="catalog">
             <!-- Товары загружаются через JS -->
         </main>
 
         <!-- Нижняя навигация -->
         <nav class="bottom-nav">
-            <div class="nav-item" data-category="airpods">
-                <img src="airpods.png" alt="AirPods" class="nav-icon">
+            <div class="nav-item" data-category="watch">
+                <img src="watch.png" alt="Watch" class="nav-icon">
             </div>
             <div class="nav-item active" data-category="all">
                 <img src="apple.png" alt="Apple" class="nav-icon">
@@ -33,19 +36,52 @@
             <div class="nav-item" data-category="mac">
                 <img src="computer.png" alt="Mac" class="nav-icon">
             </div>
+            <div class="nav-item" data-category="airpods">
+                <img src="airpods.png" alt="AirPods" class="nav-icon">
+            </div>
         </nav>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Модальное окно товара -->
     <div class="modal" id="productModal">
-        <div class="modal-content">
+        <div class="modal-content glass-effect">
             <span class="close-modal">&times;</span>
             <div class="modal-carousel" id="modalCarousel"></div>
             <h2 id="modalTitle"></h2>
             <p id="modalPrice"></p>
             <p id="modalDescription"></p>
             <div id="modalSpecs" class="specs"></div>
-            <button class="buy-btn" id="modalBuyBtn">Купить</button>
+            <button class="buy-btn" id="modalBuyBtn">🛒 Добавить в корзину</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно корзины -->
+    <div class="modal" id="cartModal">
+        <div class="modal-content glass-effect">
+            <span class="close-modal" id="closeCart">&times;</span>
+            <h2>🛒 Корзина</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total">
+                <span>Итого:</span>
+                <span id="cartTotal">0$</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">💳 Оплатить</button>
+            <button class="clear-cart-btn" id="clearCartBtn">🗑 Очистить</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно оплаты -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content glass-effect payment-modal">
+            <span class="close-modal" id="closePayment">&times;</span>
+            <h2>💳 Оплата заказа</h2>
+            <div id="paymentDetails"></div>
+            <div class="payment-methods">
+                <button class="payment-method" data-method="card">💳 Карта</button>
+                <button class="payment-method" data-method="applepay">🍎 Apple Pay</button>
+                <button class="payment-method" data-method="crypto">₿ Crypto</button>
+            </div>
+            <button class="confirm-payment-btn" id="confirmPaymentBtn">✅ Подтвердить оплату</button>
         </div>
     </div>
 
