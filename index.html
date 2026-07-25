@@ -5,16 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Apple Store</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
 </head>
 <body>
     <div id="app">
+        <!-- Динамический островок (как на iPhone) -->
+        <div class="dynamic-island" id="dynamicIsland">
+            <div class="island-content">
+                <div class="island-time" id="islandTime">9:41</div>
+                <div class="island-status">
+                    <span class="island-dot"></span>
+                    <span class="island-text">Apple Store</span>
+                </div>
+                <div class="island-battery">🔋</div>
+            </div>
+        </div>
+
         <!-- Верхняя панель -->
         <header class="header">
-            <div class="logo">🍎 Apple Store</div>
+            <div class="logo">
+                <span class="logo-icon">🍎</span>
+                <span class="logo-text">Apple Store</span>
+            </div>
             <div class="header-actions">
-                <div class="cart-badge" id="cartBadge">0</div>
-                <button class="cart-btn" id="cartBtn">🛒</button>
+                <button class="cart-btn" id="cartBtn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
             </div>
         </header>
 
@@ -23,22 +41,37 @@
             <!-- Товары загружаются через JS -->
         </main>
 
-        <!-- Нижняя навигация -->
+        <!-- Нижняя навигация как в Telegram -->
         <nav class="bottom-nav">
             <div class="nav-item" data-category="watch">
-                <img src="watch.png" alt="Watch" class="nav-icon">
+                <div class="nav-icon-wrapper">
+                    <img src="watch.png" alt="Watch" class="nav-icon">
+                </div>
+                <span class="nav-label">Watch</span>
             </div>
             <div class="nav-item active" data-category="all">
-                <img src="apple.png" alt="Apple" class="nav-icon">
+                <div class="nav-icon-wrapper">
+                    <img src="apple.png" alt="Apple" class="nav-icon">
+                </div>
+                <span class="nav-label">Все</span>
             </div>
             <div class="nav-item" data-category="iphone">
-                <img src="iphone.png" alt="iPhone" class="nav-icon">
+                <div class="nav-icon-wrapper">
+                    <img src="iphone.png" alt="iPhone" class="nav-icon">
+                </div>
+                <span class="nav-label">iPhone</span>
             </div>
             <div class="nav-item" data-category="mac">
-                <img src="computer.png" alt="Mac" class="nav-icon">
+                <div class="nav-icon-wrapper">
+                    <img src="computer.png" alt="Mac" class="nav-icon">
+                </div>
+                <span class="nav-label">Mac</span>
             </div>
             <div class="nav-item" data-category="airpods">
-                <img src="airpods.png" alt="AirPods" class="nav-icon">
+                <div class="nav-icon-wrapper">
+                    <img src="airpods.png" alt="AirPods" class="nav-icon">
+                </div>
+                <span class="nav-label">AirPods</span>
             </div>
         </nav>
     </div>
@@ -46,35 +79,46 @@
     <!-- Модальное окно товара -->
     <div class="modal" id="productModal">
         <div class="modal-content glass-effect">
-            <span class="close-modal">&times;</span>
+            <button class="close-modal">&times;</button>
             <div class="modal-carousel" id="modalCarousel"></div>
-            <h2 id="modalTitle"></h2>
-            <p id="modalPrice"></p>
-            <p id="modalDescription"></p>
-            <div id="modalSpecs" class="specs"></div>
-            <button class="buy-btn" id="modalBuyBtn">🛒 Добавить в корзину</button>
+            <div class="modal-body">
+                <h2 id="modalTitle"></h2>
+                <p class="modal-price" id="modalPrice"></p>
+                <p class="modal-description" id="modalDescription"></p>
+                <div id="modalSpecs" class="specs"></div>
+                <button class="buy-btn" id="modalBuyBtn">🛒 Добавить в корзину</button>
+            </div>
         </div>
     </div>
 
-    <!-- Модальное окно корзины -->
+    <!-- Модальное окно корзины (стильное) -->
     <div class="modal" id="cartModal">
-        <div class="modal-content glass-effect">
-            <span class="close-modal" id="closeCart">&times;</span>
-            <h2>🛒 Корзина</h2>
-            <div id="cartItems"></div>
-            <div class="cart-total">
-                <span>Итого:</span>
-                <span id="cartTotal">0$</span>
+        <div class="modal-content glass-effect cart-modal">
+            <div class="cart-header">
+                <h2>🛒 Корзина</h2>
+                <button class="close-modal" id="closeCart">&times;</button>
             </div>
-            <button class="checkout-btn" id="checkoutBtn">💳 Оплатить картой</button>
-            <button class="clear-cart-btn" id="clearCartBtn">🗑 Очистить</button>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-comment">
+                <textarea id="cartComment" placeholder="Добавьте комментарий к заказу..." rows="2"></textarea>
+            </div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Итого</span>
+                    <span class="total-price" id="cartTotal">0 ₽</span>
+                </div>
+                <div class="cart-actions">
+                    <button class="clear-cart-btn" id="clearCartBtn">🗑 Очистить</button>
+                    <button class="checkout-btn" id="checkoutBtn">💳 Оплатить</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Модальное окно оплаты -->
     <div class="modal" id="paymentModal">
         <div class="modal-content glass-effect payment-modal">
-            <span class="close-modal" id="closePayment">&times;</span>
+            <button class="close-modal" id="closePayment">&times;</button>
             <h2>💳 Оплата картой</h2>
             <div id="paymentDetails"></div>
             <div class="payment-form">
@@ -89,7 +133,7 @@
                     </div>
                     <div class="form-group">
                         <label>CVC</label>
-                        <input type="text" id="cardCvc" placeholder="***" maxlength="3">
+                        <input type="password" id="cardCvc" placeholder="***" maxlength="3">
                     </div>
                 </div>
                 <div class="form-group">
