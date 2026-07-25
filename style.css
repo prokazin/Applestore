@@ -59,35 +59,9 @@ body {
     }
 }
 
-@keyframes fadeSlideDown {
-    from {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-    to {
-        opacity: 0;
-        transform: translateY(20px) scale(0.95);
-    }
-}
-
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.05); }
-}
-
-@keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
-}
-
-@keyframes glow {
-    0%, 100% { box-shadow: 0 0 20px rgba(124, 58, 237, 0.2); }
-    50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.4); }
 }
 
 @keyframes modalIn {
@@ -99,6 +73,11 @@ body {
         opacity: 1;
         transform: scale(1) translateY(0);
     }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* ===== ОСНОВНОЙ КОНТЕЙНЕР ===== */
@@ -581,44 +560,63 @@ body {
 /* ===== МОДАЛЬНОЕ ОКНО ОПЛАТЫ ===== */
 .payment-modal h2 {
     text-align: center;
+    margin-bottom: 16px;
 }
 
 #paymentDetails {
-    margin: 12px 0;
+    margin: 8px 0 12px;
     padding: 12px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 12px;
 }
 
-.payment-methods {
-    display: flex;
-    gap: 8px;
+.payment-form {
     margin: 12px 0;
-    flex-wrap: wrap;
 }
 
-.payment-method {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px;
+.form-group {
+    margin-bottom: 10px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 3px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px 12px;
     background: rgba(255, 255, 255, 0.05);
     border: 2px solid rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
+    border-radius: 10px;
     color: #fff;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+    font-size: 14px;
     transition: all 0.3s ease;
+    font-family: monospace;
 }
 
-.payment-method:active {
-    transform: scale(0.95);
-}
-
-.payment-method.active {
+.form-group input:focus {
+    outline: none;
     border-color: #7c3aed;
-    background: rgba(124, 58, 237, 0.15);
-    box-shadow: 0 0 30px rgba(124, 58, 237, 0.1);
+    background: rgba(124, 58, 237, 0.05);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+}
+
+.form-row .form-group {
+    flex: 1;
 }
 
 .confirm-payment-btn {
@@ -632,14 +630,31 @@ body {
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
+    margin-top: 8px;
 }
 
 .confirm-payment-btn:active {
     transform: scale(0.97);
 }
 
+.confirm-payment-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .confirm-payment-btn.success {
     background: linear-gradient(135deg, #34c759, #28a745);
+}
+
+.confirm-payment-btn.error {
+    background: linear-gradient(135deg, #ff3b30, #dc3545);
+}
+
+.secure-text {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 10px;
 }
 
 /* ===== УВЕДОМЛЕНИЯ ===== */
