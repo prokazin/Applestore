@@ -7,8 +7,9 @@ document.getElementById('loginBtn').addEventListener('click', () => {
         document.getElementById('loginForm').style.display = 'none';
         document.getElementById('adminPanel').style.display = 'block';
         loadAdminProducts();
+        showNotification('✅ Добро пожаловать в админ-панель!', 'success');
     } else {
-        alert('❌ Неверный пароль!');
+        showNotification('❌ Неверный пароль!', 'error');
         document.getElementById('adminPassword').value = '';
     }
 });
@@ -21,7 +22,25 @@ document.getElementById('logoutBtn').addEventListener('click', () => {
     document.getElementById('loginForm').style.display = 'block';
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('adminPassword').value = '';
+    showNotification('👋 Вы вышли из админ-панели');
 });
+
+// ===== УВЕДОМЛЕНИЯ =====
+function showNotification(message, type = 'info') {
+    const existing = document.querySelector('.notification');
+    if (existing) existing.remove();
+    
+    const notif = document.createElement('div');
+    notif.className = `notification ${type}`;
+    notif.textContent = message;
+    document.body.appendChild(notif);
+    
+    setTimeout(() => {
+        notif.style.opacity = '0';
+        notif.style.transform = 'translateX(-50%) translateY(-10px)';
+        setTimeout(() => notif.remove(), 300);
+    }, 2500);
+}
 
 // ===== ЗАГРУЗКА ТОВАРОВ =====
 function loadAdminProducts() {
@@ -29,7 +48,7 @@ function loadAdminProducts() {
     const list = document.getElementById('adminProductList');
     
     if (products.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;">Нет товаров</p>';
+        list.innerHTML = '<p style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;">📭 Нет товаров</p>';
         return;
     }
     
@@ -37,7 +56,7 @@ function loadAdminProducts() {
         <div class="admin-product-item">
             <div>
                 <h4>${p.name}</h4>
-                <p>💰 ${p.price}</p>
+                <p>💰 ${p.price} | 📂 ${p.category}</p>
             </div>
             <div>
                 <button onclick="deleteProduct(${index})">🗑</button>
@@ -67,7 +86,7 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     });
     
     if (!name || !price) {
-        alert('⚠️ Заполните название и цену!');
+        showNotification('⚠️ Заполните название и цену!', 'error');
         return;
     }
     
@@ -94,7 +113,7 @@ document.getElementById('addProductBtn').addEventListener('click', () => {
     document.getElementById('productImages').value = '';
     document.querySelectorAll('.spec-name, .spec-value').forEach(inp => inp.value = '');
     
-    alert('✅ Товар добавлен!');
+    showNotification('✅ Товар добавлен!', 'success');
 });
 
 // ===== ДОБАВЛЕНИЕ ХАРАКТЕРИСТИКИ =====
@@ -112,11 +131,12 @@ document.querySelector('.add-spec-btn').addEventListener('click', () => {
 
 // ===== УДАЛЕНИЕ =====
 function deleteProduct(index) {
-    if (confirm('Удалить товар?')) {
+    if (confirm('🗑 Удалить товар?')) {
         const products = JSON.parse(localStorage.getItem('appleStoreProducts') || '[]');
         products.splice(index, 1);
         localStorage.setItem('appleStoreProducts', JSON.stringify(products));
         loadAdminProducts();
+        showNotification('🗑 Товар удален');
     }
 }
 
@@ -126,17 +146,22 @@ function editProduct(index) {
     const product = products[index];
     if (!product) return;
     
-    const newName = prompt('Новое название:', product.name);
+    const newName = prompt('📝 Новое название:', product.name);
     if (newName !== null && newName.trim()) product.name = newName.trim();
     
-    const newPrice = prompt('Новая цена:', product.price);
+    const newPrice = prompt('💰 Новая цена:', product.price);
     if (newPrice !== null && newPrice.trim()) product.price = newPrice.trim();
+    
+    const newDesc = prompt('📝 Новое описание:', product.description);
+    if (newDesc !== null) product.description = newDesc.trim() || 'Описание отсутствует';
     
     localStorage.setItem('appleStoreProducts', JSON.stringify(products));
     loadAdminProducts();
-    alert('✅ Товар обновлен!');
+    showNotification('✅ Товар обновлен!', 'success');
 }
 
 // ===== ЗАЩИТА ОТ ЗУМА =====
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('gesturechange', (e) => e.preventDefault());
+
+console.log('🔐 Админ-панель загружена');
