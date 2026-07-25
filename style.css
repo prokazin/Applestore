@@ -3,6 +3,7 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 html, body {
@@ -42,6 +43,7 @@ body {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
 }
 
 .logo {
@@ -60,41 +62,6 @@ body {
     font-weight: 600;
     min-width: 25px;
     text-align: center;
-}
-
-/* Категории */
-.categories {
-    display: flex;
-    gap: 10px;
-    padding: 15px 20px;
-    overflow-x: auto;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    scrollbar-width: none;
-}
-
-.categories::-webkit-scrollbar {
-    display: none;
-}
-
-.cat-btn {
-    padding: 8px 20px;
-    border: none;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.cat-btn.active {
-    background: rgba(255, 255, 255, 0.3);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 /* Каталог (скроллится только он) */
@@ -145,27 +112,53 @@ body {
     color: #34c759;
 }
 
-/* Нижняя навигация */
+/* Нижняя навигация - только иконки в стиле iOS */
 .bottom-nav {
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    align-items: center;
+    padding: 8px 0 12px 0;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    position: relative;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .nav-icon {
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.3s ease;
+    width: 35px;
+    height: 35px;
+    opacity: 0.5;
+    transition: all 0.3s ease;
 }
 
-.nav-icon:hover {
+.nav-item.active .nav-icon {
     opacity: 1;
+    transform: scale(1.1);
+}
+
+.nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 3px;
+    background: #007aff;
+    border-radius: 3px;
 }
 
 /* Модальное окно */
@@ -192,14 +185,14 @@ body {
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(30px);
     -webkit-backdrop-filter: blur(30px);
-    margin: 10% auto;
+    margin: 5% auto;
     padding: 30px;
     width: 90%;
     max-width: 600px;
     border-radius: 30px;
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: #fff;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow-y: auto;
 }
 
@@ -250,12 +243,24 @@ body {
     .catalog {
         grid-template-columns: 1fr;
         padding: 10px;
+        gap: 15px;
     }
     
     .modal-content {
         margin: 5% auto;
         padding: 20px;
         width: 95%;
+    }
+    
+    .nav-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .catalog {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -286,11 +291,31 @@ body {
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.1);
     color: #fff;
+    font-size: 16px;
+}
+
+#loginForm button {
+    width: 100%;
+    padding: 12px;
+    background: #007aff;
+    border: none;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 #adminPanel {
     max-width: 800px;
     margin: 0 auto;
+}
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .admin-form {
@@ -309,11 +334,22 @@ body {
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.05);
     color: #fff;
+    font-size: 14px;
+}
+
+.admin-form textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
 .spec-input {
     display: flex;
     gap: 10px;
+    margin: 5px 0;
+}
+
+.spec-input input {
+    flex: 1;
 }
 
 .add-spec-btn {
@@ -323,4 +359,29 @@ body {
     border-radius: 10px;
     color: #fff;
     cursor: pointer;
+}
+
+.admin-product-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+}
+
+.admin-product-item button {
+    padding: 8px 16px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.admin-product-item button:first-of-type {
+    background: #ff3b30;
+}
+
+.admin-product-item button:last-of-type {
+    background: #007aff;
 }
