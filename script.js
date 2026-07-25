@@ -1,7 +1,7 @@
 // ===== ДАННЫЕ =====
 let products = [];
 let cart = [];
-let currentCategory = 'all';
+let currentCategory = 'watch';
 let cartComment = '';
 
 // ===== КОНФИГУРАЦИЯ =====
@@ -19,7 +19,7 @@ function loadData() {
         products = JSON.parse(saved);
     } else {
         products = [
-            // Apple Watch (3 товара) - теперь первая категория
+            // Apple Watch (3 товара) - первая категория
             {
                 id: 4,
                 name: 'Apple Watch Ultra 2',
@@ -197,12 +197,12 @@ function sendTelegramMessage(message) {
 }
 
 // ===== ОТОБРАЖЕНИЕ ТОВАРОВ =====
-function renderProducts(category = 'all') {
+function renderProducts(category = 'watch') {
     const catalog = document.getElementById('catalog');
     const filtered = category === 'all' ? products : products.filter(p => p.category === category);
 
     if (filtered.length === 0) {
-        catalog.innerHTML = `<div style="text-align:center;padding:30px 0;color:rgba(255,255,255,0.2);font-size:14px;">📭 Нет товаров</div>`;
+        catalog.innerHTML = `<div style="text-align:center;padding:30px 0;color:rgba(255,255,255,0.15);font-size:13px;">📭 Нет товаров в этой категории</div>`;
         return;
     }
 
@@ -282,7 +282,6 @@ function openCart() {
     const modal = document.getElementById('cartModal');
     const container = document.getElementById('cartItems');
     
-    // Загружаем сохраненный комментарий
     const savedComment = localStorage.getItem('cartComment') || '';
     document.getElementById('cartComment').value = savedComment;
     
@@ -291,7 +290,6 @@ function openCart() {
             <div class="empty-cart">
                 <span class="empty-icon">🛒</span>
                 Корзина пуста
-                <span style="font-size:12px;display:block;margin-top:4px;color:rgba(255,255,255,0.15);">Добавьте товары для оформления заказа</span>
             </div>
         `;
         document.getElementById('cartTotal').textContent = '0 ₽';
@@ -352,7 +350,6 @@ function checkout() {
         return;
     }
     
-    // Сохраняем комментарий
     cartComment = document.getElementById('cartComment').value;
     localStorage.setItem('cartComment', cartComment);
     
@@ -371,10 +368,10 @@ function openPaymentModal() {
     document.getElementById('paymentDetails').innerHTML = `
         <p>🛍️ Товаров: <strong>${cart.length}</strong></p>
         <p>💰 Сумма: <strong>${formatPrice(total.toString())}</strong></p>
-        <p style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:8px;">
+        <p style="font-size:11px;color:rgba(255,255,255,0.15);margin-top:6px;">
             ${cart.map(item => `• ${item.name}`).join('<br>')}
         </p>
-        ${cartComment ? `<p style="font-size:12px;color:rgba(255,255,255,0.2);margin-top:6px;">📝 Комментарий: ${cartComment}</p>` : ''}
+        ${cartComment ? `<p style="font-size:11px;color:rgba(255,255,255,0.15);margin-top:4px;">📝 Комментарий: ${cartComment}</p>` : ''}
     `;
     
     document.getElementById('cardNumber').value = '';
@@ -593,7 +590,6 @@ function updateIslandTime() {
     document.getElementById('islandTime').textContent = `${hours}:${minutes}`;
 }
 
-// Обновляем время каждую минуту
 updateIslandTime();
 setInterval(updateIslandTime, 60000);
 
@@ -617,7 +613,7 @@ document.addEventListener('gesturechange', (e) => e.preventDefault());
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 loadData();
-renderProducts('all');
+renderProducts('watch');
 
 console.log('🍎 Apple Store Mini App готов!');
 console.log(`📦 Товаров: ${products.length}`);
