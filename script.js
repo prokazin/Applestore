@@ -2,9 +2,10 @@
 let products = [];
 let cart = [];
 let currentCategory = 'all';
-let selectedPaymentMethod = 'card';
 
-// ===== КОНФИГУРАЦИЯ TELEGRAM =====
+// ===== КОНФИГУРАЦИЯ =====
+const APP_URL = 'https://applestore.nazar-bronnikov22.workers.dev/';
+
 const TELEGRAM_CONFIG = {
     botToken: '8763062943:AAET57GuStuIhmnDCO2BD9w5v3cMp3FGtes',
     chatId: '8380652624'
@@ -176,7 +177,7 @@ function showNotification(message, type = 'info') {
         notif.style.opacity = '0';
         notif.style.transform = 'translateX(-50%) translateY(-10px)';
         setTimeout(() => notif.remove(), 300);
-    }, 2500);
+    }, 3000);
 }
 
 // ===== ОТПРАВКА В TELEGRAM =====
@@ -350,84 +351,215 @@ function openPaymentModal() {
         </p>
     `;
     
-    document.querySelectorAll('.payment-method').forEach(btn => {
-        btn.classList.remove('active');
-        if (btn.dataset.method === selectedPaymentMethod) {
-            btn.classList.add('active');
-        }
-    });
+    // Очищаем поля
+    document.getElementById('cardNumber').value = '';
+    document.getElementById('cardExpiry').value = '';
+    document.getElementById('cardCvc').value = '';
+    document.getElementById('cardName').value = '';
     
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
-// ===== ВЫБОР МЕТОДА ОПЛАТЫ =====
-document.querySelectorAll('.payment-method').forEach(btn => {
-    btn.addEventListener('click', () => {
-        document.querySelectorAll('.payment-method').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        selectedPaymentMethod = btn.dataset.method;
-    });
+// ===== ФОРМАТИРОВАНИЕ НОМЕРА КАРТЫ =====
+document.getElementById('cardNumber').addEventListener('input', function(e) {
+    let value = this.value.replace(/\D/g, '');
+    if (value.length > 16) value = value.slice(0, 16);
+    let formatted = '';
+    for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) formatted += ' ';
+        formatted += value[i];
+    }
+    this.value = formatted;
 });
 
+document.getElementById('cardExpiry').addEventListener('input', function(e) {
+    let value = this.value.replace(/\D/g, '');
+    if (value.length > 4) value = value.slice(0, 4);
+    if (value.length >= 2) {
+        this.value = value.slice(0, 2) + '/' + value.slice(2);
+    } else {
+        this.value = value;
+    }
+});
+
+document.getElementById('cardCvc').addEventListener('input', function(e) {
+    this.value = this.value.replace(/\D/g, '').slice(0, 3);
+});
+
+// ===== ПРОВЕРКА КАРТЫ (валидация) =====
+function validateCard(number, expiry, cvc, name) {
+    const errors = [];
+    
+    // Проверка номера карты
+    const cleanNumber = number.replace(/\s/g, '');
+    if (cleanNumber.length !== 16) {
+        errors.push('Номер карты должен содержать 16 цифр');
+    }
+    if (!/^\d{16}$/.test(cleanNumber)) {
+        errors.push('Номер карты содержит недопустимые символы');
+    }
+    
+    // Проверка срока
+    if (!/^\d{2}\/\d{2}$/.test(expiry)) {
+        errors.push('Формат срока: MM/YY');
+    } else {
+        const [month, year] = expiry.split('/');
+        const currentYear = new Date().getFullYear() % 100;
+        const currentMonth = new Date().getMonth() + 1;
+        if (parseInt(month) < 1 || parseInt(month) > 12) {
+            errors.push('Неверный месяц');
+        }
+        if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+            errors.push('Карта просрочена');
+        }
+    }
+    
+    // Проверка CVC
+    if (!/^\d{3}$/.test(cvc)) {
+        errors.push('CVC должен содержать 3 цифры');
+    }
+    
+    // Проверка имени
+    if (name.length < 2) {
+        errors.push('Введите имя владельца');
+    }
+    
+    return errors;
+}
+
 // ===== ПОДТВЕРЖДЕНИЕ ОПЛАТЫ =====
-document.getElementById('confirmPaymentBtn').addEventListener('click', () => {
-    const btn = document.getElementById('confirmPaymentBtn');
-    btn.textContent = '⏳ Обработка...';
+document.getElementById('confirmPaymentBtn').addEventListener('click', async function() {
+    const cardNumber = document.getElementById('cardNumber').value;
+    const cardExpiry = document.getElementById('cardExpiry').value;
+    const cardCvc = document.getElementById('cardCvc').value;
+    const cardName = document.getElementById('cardName').value;
+    
+    const btn = this;
+    btn.textContent = '⏳ Проверка...';
     btn.disabled = true;
+    
+    // Валидация карты
+    const errors = validateCard(cardNumber, cardExpiry, cardCvc, cardName);
+    if (errors.length > 0) {
+        btn.textContent = '❌ Ошибка';
+        btn.classList.add('error');
+        showNotification('⚠️ ' + errors[0], 'error');
+        setTimeout(() => {
+            btn.textContent = '✅ Оплатить';
+            btn.classList.remove('error');
+            btn.disabled = false;
+        }, 2000);
+        return;
+    }
     
     const total = cart.reduce((sum, item) => {
         const price = parseFloat(item.price.replace('$', ''));
         return sum + price;
     }, 0);
     
-    const orderDetails = cart.map(item => `• ${item.name} - ${item.price}`).join('\n');
-    const message = `
-🛍️ <b>НОВЫЙ ЗАКАЗ!</b>
+    // Создаем платеж через YooKassa
+    try {
+        btn.textContent = '⏳ Обработка...';
+        
+        // 1. Создаем платеж на сервере (через Cloudflare Worker)
+        const response = await fetch(`${APP_URL}create-payment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                amount: total,
+                currency: 'RUB',
+                description: `Заказ в Apple Store (${cart.length} товаров)`,
+                items: cart.map(item => item.name).join(', ')
+            })
+        });
+        
+        const paymentData = await response.json();
+        
+        if (paymentData.error) {
+            throw new Error(paymentData.error);
+        }
+        
+        // 2. Открываем виджет оплаты YooKassa
+        const checkout = new YooKassaCheckoutWidget({
+            confirmation_token: paymentData.confirmation_token,
+            return_url: APP_URL,
+            error_callback: function(error) {
+                console.error('Ошибка оплаты:', error);
+                showNotification('❌ Ошибка оплаты. Попробуйте снова', 'error');
+                btn.textContent = '✅ Оплатить';
+                btn.classList.add('error');
+                btn.disabled = false;
+                setTimeout(() => {
+                    btn.classList.remove('error');
+                }, 3000);
+            }
+        });
+        
+        checkout.on('success', function() {
+            // Успешная оплата
+            btn.textContent = '✅ Успешно!';
+            btn.classList.add('success');
+            
+            // Отправляем заказ продавцу
+            const orderDetails = cart.map(item => `• ${item.name} - ${item.price}`).join('\n');
+            const message = `
+🛍️ <b>НОВЫЙ ЗАКАЗ ОПЛАЧЕН!</b>
 
 📦 <b>Товары:</b>
 ${orderDetails}
 
-💰 <b>Итого:</b> ${total.toFixed(0)}$
-💳 <b>Оплата:</b> ${selectedPaymentMethod}
+💰 <b>Итого:</b> ${total.toFixed(0)} RUB
+💳 <b>Оплата:</b> Карта (YooKassa)
 
 👤 <b>Клиент:</b> Telegram Mini App
-    `.trim();
-    
-    sendTelegramMessage(message).then(result => {
-        if (result.ok) {
-            btn.textContent = '✅ Успешно!';
-            btn.classList.add('success');
-            showNotification('🎉 Заказ успешно оформлен!', 'success');
+✅ <b>Статус:</b> ОПЛАЧЕНО
+            `.trim();
             
+            sendTelegramMessage(message);
+            showNotification('🎉 Оплата прошла успешно!', 'success');
+            
+            // Очищаем корзину
             cart = [];
             saveCart();
             updateCartBadge();
             
             setTimeout(() => {
-                btn.textContent = '✅ Подтвердить оплату';
+                btn.textContent = '✅ Оплатить';
                 btn.classList.remove('success');
                 btn.disabled = false;
                 document.getElementById('paymentModal').style.display = 'none';
                 document.body.style.overflow = 'auto';
-            }, 2000);
-        } else {
-            btn.textContent = '❌ Ошибка';
+            }, 3000);
+        });
+        
+        checkout.on('fail', function() {
+            showNotification('❌ Оплата не прошла. Попробуйте снова', 'error');
+            btn.textContent = '✅ Оплатить';
+            btn.classList.add('error');
+            btn.disabled = false;
             setTimeout(() => {
-                btn.textContent = '✅ Подтвердить оплату';
-                btn.disabled = false;
-            }, 2000);
-            showNotification('❌ Ошибка оплаты', 'error');
-        }
-    });
+                btn.classList.remove('error');
+            }, 3000);
+        });
+        
+        checkout.render();
+        
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showNotification('❌ Ошибка оплаты: ' + error.message, 'error');
+        btn.textContent = '✅ Оплатить';
+        btn.classList.add('error');
+        btn.disabled = false;
+        setTimeout(() => {
+            btn.classList.remove('error');
+        }, 3000);
+    }
 });
 
 // ===== ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН =====
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-    document.body.style.overflow = 'auto';
-}
-
 document.querySelectorAll('.close-modal').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const modal = e.target.closest('.modal');
@@ -485,3 +617,4 @@ renderProducts('all');
 console.log('🍎 Apple Store Mini App готов!');
 console.log(`📦 Товаров: ${products.length}`);
 console.log(`🛒 В корзине: ${cart.length}`);
+console.log(`🔗 URL: ${APP_URL}`);
