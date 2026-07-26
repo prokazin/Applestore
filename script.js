@@ -3,6 +3,7 @@ let products = [];
 let cart = [];
 let currentCategory = 'watch';
 let cartComment = '';
+let loadingInterval;
 
 // ===== КОНФИГУРАЦИЯ =====
 const APP_URL = 'https://applestore.nazar-bronnikov22.workers.dev/';
@@ -12,6 +13,28 @@ const TELEGRAM_CONFIG = {
     chatId: '8380652624'
 };
 
+// ===== ЗАГРУЗОЧНЫЙ ЭКРАН =====
+function showLoadingScreen() {
+    const screen = document.getElementById('loadingScreen');
+    const progress = document.getElementById('loadingProgress');
+    let width = 0;
+    
+    loadingInterval = setInterval(() => {
+        width += Math.random() * 3 + 1;
+        if (width >= 100) {
+            width = 100;
+            clearInterval(loadingInterval);
+            setTimeout(() => {
+                screen.classList.add('hidden');
+                setTimeout(() => {
+                    screen.style.display = 'none';
+                }, 500);
+            }, 300);
+        }
+        progress.style.width = width + '%';
+    }, 50);
+}
+
 // ===== ЗАГРУЗКА ДАННЫХ =====
 function loadData() {
     const saved = localStorage.getItem('appleStoreProducts');
@@ -19,7 +42,7 @@ function loadData() {
         products = JSON.parse(saved);
     } else {
         products = [
-            // Apple Watch (3 товара) - первая категория
+            // Apple Watch (3 товара)
             {
                 id: 4,
                 name: 'Apple Watch Ultra 2',
@@ -593,10 +616,36 @@ function updateIslandTime() {
 updateIslandTime();
 setInterval(updateIslandTime, 60000);
 
+// ===== ТАЙМЕР АКЦИИ =====
+function startPromoTimer() {
+    let hours = 12, minutes = 34, seconds = 56;
+    
+    setInterval(() => {
+        seconds--;
+        if (seconds < 0) {
+            seconds = 59;
+            minutes--;
+            if (minutes < 0) {
+                minutes = 59;
+                hours--;
+                if (hours < 0) {
+                    hours = 0;
+                    minutes = 0;
+                    seconds = 0;
+                }
+            }
+        }
+        
+        document.getElementById('timerHours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('timerMinutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('timerSeconds').textContent = String(seconds).padStart(2, '0');
+    }, 1000);
+}
+
 // ===== НАВИГАЦИЯ =====
-document.querySelectorAll('.nav-item').forEach(item => {
+document.querySelectorAll('.tab-item').forEach(item => {
     item.addEventListener('click', () => {
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
         renderProducts(item.dataset.category);
     });
@@ -612,8 +661,19 @@ document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('gesturechange', (e) => e.preventDefault());
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
+// Показываем загрузочный экран
+showLoadingScreen();
+
+// Загружаем данные
 loadData();
-renderProducts('watch');
+
+// Запускаем таймер акции
+startPromoTimer();
+
+// После загрузки данных рендерим товары
+setTimeout(() => {
+    renderProducts('watch');
+}, 500);
 
 console.log('🍎 Apple Store Mini App готов!');
 console.log(`📦 Товаров: ${products.length}`);
