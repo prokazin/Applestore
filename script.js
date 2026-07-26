@@ -42,12 +42,12 @@ function loadData() {
         products = JSON.parse(saved);
     } else {
         products = [
-            // Apple Watch (3 товара)
+            // ===== APPLE WATCH =====
             {
                 id: 4,
                 name: 'Apple Watch Ultra 2',
                 price: '79900',
-                description: 'Самые прочные умные часы для экстремальных условий',
+                description: 'Самые прочные умные часы для экстремальных условий. Титан, 49 мм, дисплей 3000 нит',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '49mm', 'Процессор': 'S9', 'GPS': 'Точный', 'Защита': 'WR100' }
@@ -56,7 +56,7 @@ function loadData() {
                 id: 5,
                 name: 'Apple Watch Series 9',
                 price: '39900',
-                description: 'Умные часы с сенсором температуры',
+                description: 'Умные часы с сенсором температуры и функцией ЭКГ',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '45mm', 'Процессор': 'S9', 'Пульс': 'Да', 'ЭКГ': 'Да' }
@@ -65,23 +65,32 @@ function loadData() {
                 id: 6,
                 name: 'Apple Watch SE',
                 price: '24900',
-                description: 'Доступные умные часы с фитнес-трекингом',
+                description: 'Доступные умные часы с фитнес-трекингом и GPS',
                 category: 'watch',
                 images: ['https://images.unsplash.com/photo-1579586337278-3befd40fd17a?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '44mm', 'Процессор': 'S8', 'GPS': 'Да', 'Водозащита': '50m' }
             },
-            // iPhone (3 товара)
+            // ===== IPHONE =====
             {
                 id: 1,
-                name: 'iPhone 15 Pro',
-                price: '99990',
-                description: 'Флагманский смартфон с титановым корпусом и Dynamic Island',
+                name: 'iPhone 15 Pro Max',
+                price: '129990',
+                description: 'Флагманский смартфон с титановым корпусом, Dynamic Island и чипом A17 Pro',
                 category: 'iphone',
                 images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A17 Pro', 'Камера': '48 МП', 'Память': '256 ГБ' }
+                specs: { 'Экран': '6.7" OLED', 'Процессор': 'A17 Pro', 'Камера': '48 МП', 'Память': '256 ГБ' }
             },
             {
                 id: 2,
+                name: 'iPhone 15 Pro',
+                price: '99990',
+                description: 'Смартфон с титановым корпусом и Dynamic Island',
+                category: 'iphone',
+                images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
+                specs: { 'Экран': '6.1" OLED', 'Процессор': 'A17 Pro', 'Камера': '48 МП', 'Память': '128 ГБ' }
+            },
+            {
+                id: 3,
                 name: 'iPhone 15',
                 price: '79990',
                 description: 'Смартфон с Dynamic Island и USB-C',
@@ -89,49 +98,40 @@ function loadData() {
                 images: ['https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '6.1" OLED', 'Процессор': 'A16', 'Камера': '48 МП', 'Память': '128 ГБ' }
             },
-            {
-                id: 3,
-                name: 'iPhone SE',
-                price: '42990',
-                description: 'Компактный смартфон с Touch ID',
-                category: 'iphone',
-                images: ['https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '4.7" LCD', 'Процессор': 'A15', 'Камера': '12 МП', 'Память': '64 ГБ' }
-            },
-            // Mac (3 товара)
+            // ===== MAC =====
             {
                 id: 7,
-                name: 'MacBook Pro 14',
+                name: 'MacBook Pro 16" M3 Max',
+                price: '299990',
+                description: 'Профессиональный ноутбук для самых сложных задач',
+                category: 'mac',
+                images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'],
+                specs: { 'Экран': '16" XDR', 'Процессор': 'M3 Max', 'Память': '36 ГБ', 'SSD': '1 ТБ' }
+            },
+            {
+                id: 8,
+                name: 'MacBook Pro 14" M3 Pro',
                 price: '199990',
-                description: 'Профессиональный ноутбук с M3 Pro',
+                description: 'Профессиональный ноутбук для работы и творчества',
                 category: 'mac',
                 images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'],
                 specs: { 'Экран': '14" XDR', 'Процессор': 'M3 Pro', 'Память': '18 ГБ', 'SSD': '512 ГБ' }
             },
             {
-                id: 8,
-                name: 'MacBook Air',
-                price: '109990',
-                description: 'Самый тонкий ноутбук с M2',
+                id: 9,
+                name: 'MacBook Air 15" M2',
+                price: '119990',
+                description: 'Самый тонкий ноутбук с большим экраном',
                 category: 'mac',
                 images: ['https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '13.6" Retina', 'Процессор': 'M2', 'Память': '8 ГБ', 'SSD': '256 ГБ' }
+                specs: { 'Экран': '15.3" Retina', 'Процессор': 'M2', 'Память': '8 ГБ', 'SSD': '256 ГБ' }
             },
-            {
-                id: 9,
-                name: 'iMac 24',
-                price: '129990',
-                description: 'Моноблок с M3 и 4.5K дисплеем',
-                category: 'mac',
-                images: ['https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&h=400&fit=crop'],
-                specs: { 'Экран': '24" 4.5K', 'Процессор': 'M3', 'Память': '8 ГБ', 'SSD': '256 ГБ' }
-            },
-            // AirPods (3 товара)
+            // ===== AIRPODS =====
             {
                 id: 10,
-                name: 'AirPods Pro 2',
+                name: 'AirPods Pro 2 USB-C',
                 price: '24990',
-                description: 'Наушники с активным шумоподавлением',
+                description: 'Наушники с активным шумоподавлением и чипом H2',
                 category: 'airpods',
                 images: ['https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&h=400&fit=crop'],
                 specs: { 'Чип': 'H2', 'Время': '6 ч', 'Зарядка': 'USB-C', 'Защита': 'IPX4' }
@@ -140,10 +140,10 @@ function loadData() {
                 id: 11,
                 name: 'AirPods Max',
                 price: '54990',
-                description: 'Полноразмерные наушники премиум-класса',
+                description: 'Полноразмерные наушники премиум-класса с Hi-Fi звуком',
                 category: 'airpods',
                 images: ['https://images.unsplash.com/photo-1611859266238-a4da980d66d9?w=400&h=400&fit=crop'],
-                specs: { 'Чип': 'H1', 'Время': '20 ч', 'Зарядка': 'Lightning', 'Вес': '385 г' }
+                specs: { 'Чип': 'H1', 'Время': '20 ч', 'Зарядка': 'USB-C', 'Вес': '385 г' }
             },
             {
                 id: 12,
@@ -661,16 +661,10 @@ document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('gesturechange', (e) => e.preventDefault());
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
-// Показываем загрузочный экран
 showLoadingScreen();
-
-// Загружаем данные
 loadData();
-
-// Запускаем таймер акции
 startPromoTimer();
 
-// После загрузки данных рендерим товары
 setTimeout(() => {
     renderProducts('watch');
 }, 500);
