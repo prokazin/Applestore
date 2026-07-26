@@ -9,8 +9,28 @@
     <script src="https://yookassa.ru/checkout-widget/v1/checkout-widget.js"></script>
 </head>
 <body>
+    <!-- Загрузочный экран -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <img src="loading.gif" alt="Loading" class="loading-gif">
+            <h2 class="loading-title">Apple Store</h2>
+            <p class="loading-subtitle">Добро пожаловать!</p>
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Видео фон -->
+    <div class="video-background">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="bk.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
     <!-- Эмуляция экрана телефона -->
-    <div class="phone-frame">
+    <div class="phone-frame" id="phoneFrame">
         <div id="app">
             <!-- Динамический островок -->
             <div class="dynamic-island" id="dynamicIsland">
@@ -23,7 +43,7 @@
                 </div>
             </div>
 
-            <!-- Верхняя панель без логотипа -->
+            <!-- Верхняя панель -->
             <header class="header">
                 <div class="header-left"></div>
                 <div class="header-center"></div>
@@ -35,36 +55,57 @@
                 </div>
             </header>
 
+            <!-- Баннер акции -->
+            <div class="promo-banner" id="promoBanner">
+                <div class="promo-content">
+                    <div class="promo-text">
+                        <span class="promo-tag">🔥 HOT SALE</span>
+                        <h3>Скидка до 30%</h3>
+                        <p>на Apple Watch и AirPods</p>
+                    </div>
+                    <div class="promo-timer" id="promoTimer">
+                        <span class="timer-label">До конца акции:</span>
+                        <div class="timer-digits">
+                            <span class="timer-unit" id="timerHours">12</span>
+                            <span class="timer-sep">:</span>
+                            <span class="timer-unit" id="timerMinutes">34</span>
+                            <span class="timer-sep">:</span>
+                            <span class="timer-unit" id="timerSeconds">56</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Каталог товаров -->
             <main class="catalog" id="catalog">
                 <!-- Товары загружаются через JS -->
             </main>
 
-            <!-- Нижняя навигация как в Telegram -->
-            <nav class="bottom-nav">
-                <div class="nav-item active" data-category="watch">
-                    <div class="nav-icon-wrapper">
-                        <img src="apple.png" alt="Watch" class="nav-icon">
+            <!-- Нижняя навигация точь-в-точь как в Telegram -->
+            <nav class="bottom-nav-telegram">
+                <div class="tab-item active" data-category="watch">
+                    <div class="tab-icon-wrapper">
+                        <img src="apple.png" alt="Watch" class="tab-icon">
                     </div>
-                    <span class="nav-label">Watch</span>
+                    <span class="tab-label">Watch</span>
                 </div>
-                <div class="nav-item" data-category="iphone">
-                    <div class="nav-icon-wrapper">
-                        <img src="iphone.png" alt="iPhone" class="nav-icon">
+                <div class="tab-item" data-category="iphone">
+                    <div class="tab-icon-wrapper">
+                        <img src="iphone.png" alt="iPhone" class="tab-icon">
                     </div>
-                    <span class="nav-label">iPhone</span>
+                    <span class="tab-label">iPhone</span>
                 </div>
-                <div class="nav-item" data-category="mac">
-                    <div class="nav-icon-wrapper">
-                        <img src="computer.png" alt="Mac" class="nav-icon">
+                <div class="tab-item" data-category="mac">
+                    <div class="tab-icon-wrapper">
+                        <img src="computer.png" alt="Mac" class="tab-icon">
                     </div>
-                    <span class="nav-label">Mac</span>
+                    <span class="tab-label">Mac</span>
                 </div>
-                <div class="nav-item" data-category="airpods">
-                    <div class="nav-icon-wrapper">
-                        <img src="airpods.png" alt="AirPods" class="nav-icon">
+                <div class="tab-item" data-category="airpods">
+                    <div class="tab-icon-wrapper">
+                        <img src="airpods.png" alt="AirPods" class="tab-icon">
                     </div>
-                    <span class="nav-label">AirPods</span>
+                    <span class="tab-label">AirPods</span>
                 </div>
             </nav>
         </div>
