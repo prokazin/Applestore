@@ -12,7 +12,6 @@
     <!-- Загрузочный экран -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-content">
-            <!-- CSS анимация вместо GIF -->
             <div class="loading-animation">
                 <div class="loader-ring"></div>
                 <div class="loader-apple">🍎</div>
@@ -29,6 +28,8 @@
     <div class="video-background">
         <video autoplay muted loop playsinline id="bgVideo">
             <source src="bk.MP4" type="video/mp4">
+            <source src="bk.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео
         </video>
         <div class="video-overlay"></div>
     </div>
@@ -85,7 +86,7 @@
                 <!-- Товары загружаются через JS -->
             </main>
 
-            <!-- Нижняя навигация точь-в-точь как в Telegram -->
+            <!-- Нижняя навигация -->
             <nav class="bottom-nav-telegram">
                 <div class="tab-item active" data-category="watch">
                     <div class="tab-icon-wrapper">
